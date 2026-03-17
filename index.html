@@ -1377,10 +1377,7 @@ document.querySelectorAll('#mainTabs .tab').forEach(function(t){
   t.addEventListener('click',function(){switchTab(this.getAttribute('data-tab'))});
 });
 
-// Filter events
-document.getElementById('fYear').addEventListener('change',function(){selProd=null;selComp=null;selComps=[];applyFilters()});
-document.getElementById('fMonth').addEventListener('change',function(){selProd=null;selComp=null;selComps=[];applyFilters()});
-document.getElementById('fCat').addEventListener('change',function(){selProd=null;selComp=null;selComps=[];applyFilters()});
+// Filter events (checkboxes trigger applyFilters via onchange in buildFDItems)
 var sTO;
 document.getElementById('fSearch').addEventListener('input',function(){clearTimeout(sTO);sTO=setTimeout(function(){selComps=[];applyFilters()},300)});
 document.getElementById('evoProdSel').addEventListener('change',rPriceEvo);
@@ -1416,30 +1413,15 @@ document.querySelectorAll('th[data-dsort]').forEach(function(th){
 var PASS_HASH='30ceb714b828a9c7047dcaff65e369c6d8f24b0890ab96b166c5a062e90f227f';
 async function sha256(str){var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}
 async function checkLogin(){
-  var pass=document.getElementById('loginPass').value;
-  if(!pass){document.getElementById('loginError').textContent='Escribe la clave';document.getElementById('loginError').style.display='block';return;}
-  try{
-    var hash=await sha256(pass);
-  }catch(e){
-    // Fallback for contexts where crypto.subtle is not available
-    if(pass==='familia.ep'){
-      sessionStorage.setItem('dash_auth','1');
-      document.getElementById('loginOverlay').style.display='none';
-      document.getElementById('appContent').style.display='block';
-      loadAll();
-    }else{
-      document.getElementById('loginError').textContent='Clave incorrecta';
-      document.getElementById('loginError').style.display='block';
-    }
-    return;
-  }
+  var pass=document.getElementById('loginPass').value.trim();
+  if(!pass){document.getElementById('loginError').style.display='block';return;}
+  var hash=await sha256(pass);
   if(hash===PASS_HASH){
     sessionStorage.setItem('dash_auth','1');
     document.getElementById('loginOverlay').style.display='none';
     document.getElementById('appContent').style.display='block';
     loadAll();
   } else {
-    document.getElementById('loginError').textContent='Clave incorrecta';
     document.getElementById('loginError').style.display='block';
     document.getElementById('loginPass').value='';
     document.getElementById('loginPass').focus();
