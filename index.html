@@ -1212,7 +1212,7 @@ document.querySelectorAll('th[data-dsort]').forEach(function(th){
 });
 
 // --- Login ---
-var PASS_HASH='af503e9b3be645eab72709aafbf8a0b10fd002e44ad04890489c35b1a89bfcfb';
+var PASS_HASH='30ceb714b828a9c7047dcaff65e369c6d8f24b0890ab96b166c5a062e90f227f';
 async function sha256(str){var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}
 async function checkLogin(){
   var pass=document.getElementById('loginPass').value;
