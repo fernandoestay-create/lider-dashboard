@@ -726,12 +726,6 @@ function loadAll(){
   });
 }
 
-function getMultiVal(id){
-  var el=document.getElementById(id);var vals=[];
-  for(var i=0;i<el.options.length;i++){if(el.options[i].selected)vals.push(el.options[i].value)}
-  return vals;
-}
-
 function populateFilters(){
   var yrs={},cats={};
   allItems.forEach(function(i){if(i.anio)yrs[i.anio]=1;if(i.category)cats[i.category]=1});
