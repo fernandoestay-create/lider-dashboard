@@ -38,23 +38,45 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .kpi .kpi-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-top:4px;font-weight:600}
 .kpi .kpi-sub{font-size:11px;color:var(--accent);font-weight:600;margin-top:2px}
 
-.filters-bar{display:flex;gap:12px;padding:14px 32px;background:#fff;border-bottom:1px solid var(--border);align-items:center;flex-wrap:wrap}
+.filters-bar{display:flex;gap:8px;padding:12px 32px;background:#fff;border-bottom:1px solid var(--border);align-items:center;flex-wrap:wrap}
 .filter-group{display:flex;flex-direction:column;gap:3px}
 .filter-group label{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);font-weight:600}
 .filter-group select,.filter-group input{padding:7px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;background:#f9fafb;min-width:130px;transition:border .2s}
-.filter-group select[multiple]{height:auto;min-height:34px;max-height:180px;padding:4px}
-.filter-group select[multiple] option{padding:4px 8px;border-radius:4px;margin:1px 0;font-size:12px}
-.filter-group select[multiple] option:checked{background:var(--accent);color:#fff}
 .filter-group select:focus,.filter-group input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(230,57,70,.1)}
-.filter-tags{display:flex;gap:4px;flex-wrap:wrap;max-width:300px}
-.filter-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;font-size:11px;color:var(--accent);font-weight:500;cursor:pointer}
+/* Custom dropdown */
+.fd-wrap{position:relative;display:inline-flex;flex-direction:column;gap:3px}
+.fd-label{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);font-weight:600}
+.fd-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;background:#f9fafb;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text);font-family:inherit;transition:all .2s;white-space:nowrap;user-select:none}
+.fd-btn:hover{border-color:var(--accent);background:#fef2f2}
+.fd-btn.active{border-color:var(--accent);background:#fef2f2;color:var(--accent);font-weight:600}
+.fd-badge{background:var(--accent);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;line-height:1.4}
+.fd-arrow{font-size:10px;opacity:.5;margin-left:2px;transition:transform .2s}
+.fd-btn.open .fd-arrow{transform:rotate(180deg)}
+.fd-menu{position:absolute;top:calc(100% + 6px);left:0;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:500;min-width:210px;display:none;overflow:hidden}
+.fd-menu.open{display:block;animation:fdIn .15s ease}
+@keyframes fdIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.fd-menu-head{padding:10px 12px 8px;border-bottom:1px solid #f3f4f6}
+.fd-all-label{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text);transition:background .1s}
+.fd-all-label:hover{background:#f9fafb}
+.fd-items{max-height:230px;overflow-y:auto;padding:4px 6px 8px}
+.fd-item{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--text);transition:background .1s;line-height:1.3}
+.fd-item:hover{background:#f9fafb}
+.fd-item.dimmed{opacity:.35}
+.fd-item.dimmed:hover{opacity:.5}
+.fd-item input[type=checkbox]{cursor:pointer;accent-color:var(--accent);width:14px;height:14px;flex-shrink:0}
+.fd-item .fd-count{margin-left:auto;font-size:10px;color:var(--text2);background:#f3f4f6;padding:1px 5px;border-radius:4px;flex-shrink:0}
+.fd-divider{height:1px;background:#f3f4f6;margin:4px 0}
+/* Filter tags */
+.filter-tags{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.filter-tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:#fef2f2;border:1px solid #fecaca;border-radius:20px;font-size:11px;color:var(--accent);font-weight:500;cursor:pointer;transition:background .15s}
 .filter-tag:hover{background:#fecaca}
-.filter-tag .x{font-weight:700}
-.btn-reset{padding:8px 20px;background:var(--gradient);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;align-self:flex-end;transition:transform .15s}
+.filter-tag .x{font-weight:700;font-size:13px;line-height:1}
+/* Search input */
+.fsearch-wrap{display:flex;flex-direction:column;gap:3px}
+.fsearch-wrap input{padding:7px 12px 7px 32px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;background:#f9fafb url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E") no-repeat 10px center;min-width:180px;transition:border .2s}
+.fsearch-wrap input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(230,57,70,.1)}
+.btn-reset{padding:7px 16px;background:var(--gradient);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;align-self:flex-end;transition:transform .15s;white-space:nowrap}
 .btn-reset:hover{transform:scale(1.03)}
-.btn-todos{padding:3px 8px;background:#f0f1f2;border:1px solid var(--border);border-radius:5px;cursor:pointer;font-size:10px;font-weight:600;color:var(--text2);transition:all .15s;margin-top:2px}
-.btn-todos:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
-.btn-todos.on{background:var(--accent);color:#fff;border-color:var(--accent)}
 .evo-sel{padding:7px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;background:#f9fafb;min-width:130px;transition:border .2s}
 .evo-sel:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(230,57,70,.1)}
 select#evoProdSel{min-width:280px}
@@ -163,9 +185,10 @@ select#evoProdSel{min-width:280px}
   .kpi .kpi-sub{font-size:10px}
 
   .filters-bar{flex-direction:column;padding:10px 12px;gap:8px;align-items:stretch}
-  .filter-group{width:100%}
-  .filter-group select,.filter-group input{width:100%;min-width:unset;font-size:14px;padding:10px 12px}
-  .filter-group select[multiple]{max-height:120px}
+  .fd-wrap,.fsearch-wrap,.filter-group{width:100%}
+  .fd-btn{width:100%;justify-content:space-between}
+  .fd-menu{width:100%;min-width:unset}
+  .fsearch-wrap input,.filter-group select,.filter-group input{width:100%;min-width:unset;font-size:14px;padding:10px 12px 10px 34px}
   .filter-tags{max-width:100%}
   .btn-reset{width:100%;padding:12px;font-size:14px;text-align:center}
 
@@ -296,18 +319,59 @@ select#evoProdSel{min-width:280px}
   <div class="kpi"><div class="kpi-value" id="kV5">-</div><div class="kpi-label">Categorías</div><div class="kpi-sub" id="kS5"></div></div>
 </div>
 
-<div class="filters-bar">
-  <div class="filter-group"><label>Año <button class="btn-todos" onclick="toggleAll('fYear',this)">✓ Todos</button></label><select id="fYear" multiple size="5"></select></div>
-  <div class="filter-group"><label>Mes <button class="btn-todos" onclick="toggleAll('fMonth',this)">✓ Todos</button></label><select id="fMonth" multiple size="6">
-    <option value="Enero">Enero</option><option value="Febrero">Febrero</option><option value="Marzo">Marzo</option>
-    <option value="Abril">Abril</option><option value="Mayo">Mayo</option><option value="Junio">Junio</option>
-    <option value="Julio">Julio</option><option value="Agosto">Agosto</option><option value="Septiembre">Septiembre</option>
-    <option value="Octubre">Octubre</option><option value="Noviembre">Noviembre</option><option value="Diciembre">Diciembre</option>
-  </select></div>
-  <div class="filter-group"><label>Categoría <button class="btn-todos" onclick="toggleAll('fCat',this)">✓ Todos</button></label><select id="fCat" multiple size="6"></select></div>
-  <div class="filter-group"><label>Buscar Producto</label><input type="text" id="fSearch" placeholder="Ej: Leche, Pan..." style="width:200px"></div>
-  <button class="btn-reset" onclick="resetFilters()">Limpiar Todo</button>
-  <div class="filter-tags" id="filterTags"></div>
+<div class="filters-bar" id="filtersBar">
+  <!-- AÑO -->
+  <div class="fd-wrap" id="fdWrap-fYear">
+    <span class="fd-label">Año</span>
+    <button class="fd-btn" id="fdBtn-fYear" onclick="toggleFD('fYear',event)">
+      <span id="fdBtnTxt-fYear">Todos los años</span>
+      <span class="fd-badge" id="fdBadge-fYear" style="display:none"></span>
+      <span class="fd-arrow">▾</span>
+    </button>
+    <div class="fd-menu" id="fdMenu-fYear">
+      <div class="fd-menu-head">
+        <label class="fd-all-label"><input type="checkbox" id="fdAll-fYear" checked onchange="fdToggleAll('fYear',this)"> Seleccionar todos</label>
+      </div>
+      <div class="fd-items" id="fdItems-fYear"></div>
+    </div>
+  </div>
+  <!-- MES -->
+  <div class="fd-wrap" id="fdWrap-fMonth">
+    <span class="fd-label">Mes</span>
+    <button class="fd-btn" id="fdBtn-fMonth" onclick="toggleFD('fMonth',event)">
+      <span id="fdBtnTxt-fMonth">Todos los meses</span>
+      <span class="fd-badge" id="fdBadge-fMonth" style="display:none"></span>
+      <span class="fd-arrow">▾</span>
+    </button>
+    <div class="fd-menu" id="fdMenu-fMonth">
+      <div class="fd-menu-head">
+        <label class="fd-all-label"><input type="checkbox" id="fdAll-fMonth" checked onchange="fdToggleAll('fMonth',this)"> Seleccionar todos</label>
+      </div>
+      <div class="fd-items" id="fdItems-fMonth"></div>
+    </div>
+  </div>
+  <!-- CATEGORÍA -->
+  <div class="fd-wrap" id="fdWrap-fCat">
+    <span class="fd-label">Categoría</span>
+    <button class="fd-btn" id="fdBtn-fCat" onclick="toggleFD('fCat',event)">
+      <span id="fdBtnTxt-fCat">Todas las categorías</span>
+      <span class="fd-badge" id="fdBadge-fCat" style="display:none"></span>
+      <span class="fd-arrow">▾</span>
+    </button>
+    <div class="fd-menu" id="fdMenu-fCat">
+      <div class="fd-menu-head">
+        <label class="fd-all-label"><input type="checkbox" id="fdAll-fCat" checked onchange="fdToggleAll('fCat',this)"> Seleccionar todos</label>
+      </div>
+      <div class="fd-items" id="fdItems-fCat"></div>
+    </div>
+  </div>
+  <!-- BUSCAR -->
+  <div class="fsearch-wrap">
+    <span class="fd-label">Buscar producto</span>
+    <input type="text" id="fSearch" placeholder="Ej: Leche, Pan..." oninput="applyFilters()">
+  </div>
+  <button class="btn-reset" onclick="resetFilters()" style="align-self:flex-end;margin-top:16px">✕ Limpiar</button>
+  <div class="filter-tags" id="filterTags" style="flex:1;align-self:flex-end;padding-bottom:2px"></div>
 </div>
 
 <div class="tabs" id="mainTabs">
@@ -446,14 +510,146 @@ var prodSort='veces_desc',compSort='fecha_desc',dataSort='fecha_desc';
 var evoProdSortDir='asc'; // asc = A-Z, desc = Z-A
 var evoProdSearchText='';
 
-function toggleAll(selId,btn){
-  var el=document.getElementById(selId);
-  var allSelected=true;
-  for(var i=0;i<el.options.length;i++){if(!el.options[i].selected){allSelected=false;break}}
-  for(var i=0;i<el.options.length;i++){el.options[i].selected=!allSelected}
-  if(btn){if(!allSelected){btn.classList.add('on');btn.textContent='✕ Ninguno'}else{btn.classList.remove('on');btn.textContent='✓ Todos'}}
+// ===== CUSTOM FILTER DROPDOWNS =====
+var FD_MONTHS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+function toggleFD(id,e){
+  if(e)e.stopPropagation();
+  var menu=document.getElementById('fdMenu-'+id);
+  var btn=document.getElementById('fdBtn-'+id);
+  var isOpen=menu.classList.contains('open');
+  document.querySelectorAll('.fd-menu.open').forEach(function(m){m.classList.remove('open')});
+  document.querySelectorAll('.fd-btn.open').forEach(function(b){b.classList.remove('open')});
+  if(!isOpen){menu.classList.add('open');btn.classList.add('open')}
+}
+
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.fd-wrap')){
+    document.querySelectorAll('.fd-menu.open').forEach(function(m){m.classList.remove('open')});
+    document.querySelectorAll('.fd-btn.open').forEach(function(b){b.classList.remove('open')});
+  }
+});
+
+function fdToggleAll(id,allCb){
+  document.querySelectorAll('#fdItems-'+id+' input[type=checkbox]').forEach(function(cb){cb.checked=allCb.checked});
+  fdUpdateBadge(id);
   selProd=null;selComp=null;selComps=[];applyFilters();
 }
+
+function fdUpdateBadge(id){
+  var cbs=document.querySelectorAll('#fdItems-'+id+' input[type=checkbox]:checked');
+  var total=document.querySelectorAll('#fdItems-'+id+' input[type=checkbox]').length;
+  var count=cbs.length;
+  var badge=document.getElementById('fdBadge-'+id);
+  var btn=document.getElementById('fdBtn-'+id);
+  var txtEl=document.getElementById('fdBtnTxt-'+id);
+  var allCb=document.getElementById('fdAll-'+id);
+  var allSelected=(count===total);
+  if(allCb)allCb.checked=allSelected;
+  if(badge){badge.textContent=count;badge.style.display=(allSelected?'none':'inline')}
+  if(btn){if(!allSelected)btn.classList.add('active');else btn.classList.remove('active')}
+  if(txtEl){
+    if(allSelected){
+      txtEl.textContent=id==='fYear'?'Todos los años':id==='fMonth'?'Todos los meses':'Todas las categorías';
+    } else if(count===0){
+      txtEl.textContent='Ninguno';
+    } else if(count<=2){
+      var vals=[];cbs.forEach(function(cb){vals.push(cb.value)});
+      txtEl.textContent=vals.join(', ');
+    } else {
+      txtEl.textContent=count+' seleccionados';
+    }
+  }
+}
+
+function getMultiVal(id){
+  var vals=[];
+  var allSelected=(document.querySelectorAll('#fdItems-'+id+' input[type=checkbox]').length===
+                   document.querySelectorAll('#fdItems-'+id+' input[type=checkbox]:checked').length);
+  if(allSelected)return []; // empty = no filter = show all
+  document.querySelectorAll('#fdItems-'+id+' input[type=checkbox]:checked').forEach(function(cb){vals.push(cb.value)});
+  return vals;
+}
+
+function buildFDItems(id,values,counts){
+  var container=document.getElementById('fdItems-'+id);
+  if(!container)return;
+  var prevSelected=getMultiVal(id);
+  var html='';
+  values.forEach(function(v){
+    var isChecked=prevSelected.length===0||prevSelected.indexOf(v)!==-1;
+    var cnt=(counts&&counts[v]!=null)?counts[v]:null;
+    var emoji=(id==='fCat'?(catOf(v).e||''):'');
+    var cls='fd-item'+(counts&&cnt===0?' dimmed':'');
+    html+='<label class="'+cls+'">';
+    html+='<input type="checkbox" value="'+esc(v)+'"'+(isChecked?' checked':'')+' onchange="fdUpdateBadge(\''+id+'\');applyFilters()"> ';
+    html+=emoji+(emoji?' ':'')+esc(v);
+    if(cnt!=null)html+=' <span class="fd-count">'+cnt+'</span>';
+    html+='</label>';
+  });
+  container.innerHTML=html;
+  fdUpdateBadge(id);
+}
+
+function populateFDMonth(){
+  var container=document.getElementById('fdItems-fMonth');
+  if(!container)return;
+  var html='';
+  FD_MONTHS.forEach(function(m){
+    html+='<label class="fd-item"><input type="checkbox" value="'+m+'" checked onchange="fdUpdateBadge(\'fMonth\');applyFilters()"> '+m+'</label>';
+  });
+  container.innerHTML=html;
+  fdUpdateBadge('fMonth');
+}
+
+// Update which options are dimmed based on cross-filter availability
+function updateFDAvailability(){
+  var yrs=getMultiVal('fYear');
+  var mos=getMultiVal('fMonth');
+  var cas=getMultiVal('fCat');
+  var se=(document.getElementById('fSearch')||{}).value||'';
+  se=se.toLowerCase();
+
+  // Compute available sets for each filter (ignoring that filter's own selection)
+  var availYears={},availMonths={},availCats={},cntYears={},cntMonths={},cntCats={};
+  allItems.forEach(function(i){
+    var nm=((i.product_name_normalized||'')+(i.product_name_raw||'')).toLowerCase();
+    var matchSe=!se||nm.indexOf(se)!==-1;
+    // For year options: use mos+cas+se
+    var matchForYear=((!mos.length||mos.indexOf(i.mes_nombre)!==-1)&&(!cas.length||cas.indexOf(i.category)!==-1)&&matchSe);
+    if(matchForYear&&i.anio){availYears[i.anio]=1;cntYears[i.anio]=(cntYears[i.anio]||0)+1}
+    // For month options: use yrs+cas+se
+    var matchForMon=((!yrs.length||yrs.indexOf(String(i.anio))!==-1)&&(!cas.length||cas.indexOf(i.category)!==-1)&&matchSe);
+    if(matchForMon&&i.mes_nombre){availMonths[i.mes_nombre]=1;cntMonths[i.mes_nombre]=(cntMonths[i.mes_nombre]||0)+1}
+    // For category options: use yrs+mos+se
+    var matchForCat=((!yrs.length||yrs.indexOf(String(i.anio))!==-1)&&(!mos.length||mos.indexOf(i.mes_nombre)!==-1)&&matchSe);
+    if(matchForCat&&i.category){availCats[i.category]=1;cntCats[i.category]=(cntCats[i.category]||0)+1}
+  });
+
+  // Update year items
+  document.querySelectorAll('#fdItems-fYear .fd-item').forEach(function(lbl){
+    var cb=lbl.querySelector('input');if(!cb)return;
+    var v=cb.value;var avail=!!availYears[v];
+    lbl.classList.toggle('dimmed',!avail);
+    var cntEl=lbl.querySelector('.fd-count');if(cntEl)cntEl.textContent=cntYears[v]||0;
+  });
+  // Update month items
+  document.querySelectorAll('#fdItems-fMonth .fd-item').forEach(function(lbl){
+    var cb=lbl.querySelector('input');if(!cb)return;
+    var v=cb.value;var avail=!!availMonths[v];
+    lbl.classList.toggle('dimmed',!avail);
+    var cntEl=lbl.querySelector('.fd-count');if(cntEl)cntEl.textContent=cntMonths[v]||0;
+  });
+  // Update category items
+  document.querySelectorAll('#fdItems-fCat .fd-item').forEach(function(lbl){
+    var cb=lbl.querySelector('input');if(!cb)return;
+    var v=cb.value;var avail=!!availCats[v];
+    lbl.classList.toggle('dimmed',!avail);
+    var cntEl=lbl.querySelector('.fd-count');if(cntEl)cntEl.textContent=cntCats[v]||0;
+  });
+}
+
+function toggleAll(selId,btn){} // legacy stub
 
 function toggleEvoProdSort(){
   evoProdSortDir=evoProdSortDir==='asc'?'desc':'asc';
@@ -521,28 +717,21 @@ function getMultiVal(id){
 function populateFilters(){
   var yrs={},cats={};
   allItems.forEach(function(i){if(i.anio)yrs[i.anio]=1;if(i.category)cats[i.category]=1});
-  // Also check purchases for years
   allPurchases.forEach(function(p){if(p.anio)yrs[p.anio]=1});
   var yrKeys=Object.keys(yrs).sort();
-  console.log('Años encontrados:',yrKeys);
-  var ys=document.getElementById('fYear');ys.innerHTML='';
-  ys.setAttribute('size',Math.max(yrKeys.length,3));
-  yrKeys.forEach(function(y){var o=document.createElement('option');o.value=y;o.textContent=y;ys.appendChild(o)});
-  var cs=document.getElementById('fCat');cs.innerHTML='';
   var catKeys=Object.keys(cats).sort();
-  cs.setAttribute('size',Math.min(catKeys.length,8));
-  catKeys.forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=catOf(c).e+' '+c;cs.appendChild(o)});
-  // Evolution year dropdown
+  console.log('Años:',yrKeys,'Categorías:',catKeys.length);
+  // Build custom dropdown items
+  buildFDItems('fYear',yrKeys,null);
+  populateFDMonth();
+  buildFDItems('fCat',catKeys,null);
+  // Evolution dropdowns (keep as <select>)
   var eys=document.getElementById('evoYearSel');
   eys.innerHTML='<option value="">Todos</option>';
   yrKeys.forEach(function(y){var o=document.createElement('option');o.value=y;o.textContent=y;eys.appendChild(o)});
-  // Evolution category dropdown
-  var ecats={};
-  allItems.forEach(function(i){if(i.category)ecats[i.category]=1});
   var ecs=document.getElementById('evoCatSel');
   ecs.innerHTML='<option value="">Todas</option>';
-  Object.keys(ecats).sort().forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=catOf(c).e+' '+c;ecs.appendChild(o)});
-  // Evolution product dropdown
+  catKeys.forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=catOf(c).e+' '+c;ecs.appendChild(o)});
   fillEvoProdSel('');
 }
 
@@ -599,6 +788,8 @@ function applyFilters(){
     return true;
   });
 
+  // Update cross-filter availability (dimming)
+  updateFDAvailability();
   // Render filter tags
   var tags='';
   yrs.forEach(function(v){tags+='<span class="filter-tag" onclick="removeFilter(\'fYear\',\''+v+'\')">📅 '+v+' <span class="x">×</span></span>'});
@@ -612,22 +803,20 @@ function applyFilters(){
   updateAll();
 }
 
-function removeFilter(selId,val){
-  var el=document.getElementById(selId);
-  for(var i=0;i<el.options.length;i++){if(el.options[i].value===val)el.options[i].selected=false}
+function removeFilter(id,val){
+  var cb=document.querySelector('#fdItems-'+id+' input[value="'+val.replace(/"/g,'\\"')+'"]');
+  if(cb){cb.checked=false;fdUpdateBadge(id);}
   applyFilters();
 }
 
 function resetFilters(){
   ['fYear','fMonth','fCat'].forEach(function(id){
-    var el=document.getElementById(id);
-    for(var i=0;i<el.options.length;i++)el.options[i].selected=false;
+    document.querySelectorAll('#fdItems-'+id+' input[type=checkbox]').forEach(function(cb){cb.checked=true});
+    var allCb=document.getElementById('fdAll-'+id);if(allCb)allCb.checked=true;
+    fdUpdateBadge(id);
   });
-  // Reset "Todos" buttons
-  document.querySelectorAll('.btn-todos').forEach(function(b){b.classList.remove('on');b.textContent='✓ Todos'});
   document.getElementById('fSearch').value='';
   selProd=null;selComp=null;selComps=[];
-  // Reset evo filters
   document.getElementById('evoYearSel').value='';
   document.getElementById('evoMonthSel').value='';
   document.getElementById('evoCatSel').value='';
