@@ -1417,13 +1417,29 @@ var PASS_HASH='30ceb714b828a9c7047dcaff65e369c6d8f24b0890ab96b166c5a062e90f227f'
 async function sha256(str){var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}
 async function checkLogin(){
   var pass=document.getElementById('loginPass').value;
-  var hash=await sha256(pass);
+  if(!pass){document.getElementById('loginError').textContent='Escribe la clave';document.getElementById('loginError').style.display='block';return;}
+  try{
+    var hash=await sha256(pass);
+  }catch(e){
+    // Fallback for contexts where crypto.subtle is not available
+    if(pass==='familia.ep'){
+      sessionStorage.setItem('dash_auth','1');
+      document.getElementById('loginOverlay').style.display='none';
+      document.getElementById('appContent').style.display='block';
+      loadAll();
+    }else{
+      document.getElementById('loginError').textContent='Clave incorrecta';
+      document.getElementById('loginError').style.display='block';
+    }
+    return;
+  }
   if(hash===PASS_HASH){
     sessionStorage.setItem('dash_auth','1');
     document.getElementById('loginOverlay').style.display='none';
     document.getElementById('appContent').style.display='block';
     loadAll();
   } else {
+    document.getElementById('loginError').textContent='Clave incorrecta';
     document.getElementById('loginError').style.display='block';
     document.getElementById('loginPass').value='';
     document.getElementById('loginPass').focus();
