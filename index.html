@@ -531,43 +531,52 @@ document.addEventListener('click',function(e){
 });
 
 function fdToggleAll(id,allCb){
-  document.querySelectorAll('#fdItems-'+id+' input[type=checkbox]').forEach(function(cb){cb.checked=allCb.checked});
+  document.querySelectorAll('#fdItems-'+id+' .fd-item').forEach(function(lbl){
+    if(lbl.style.display==='none')return;
+    var cb=lbl.querySelector('input');if(cb)cb.checked=allCb.checked;
+  });
   fdUpdateBadge(id);
   selProd=null;selComp=null;selComps=[];applyFilters();
 }
 
 function fdUpdateBadge(id){
-  var cbs=document.querySelectorAll('#fdItems-'+id+' input[type=checkbox]:checked');
-  var total=document.querySelectorAll('#fdItems-'+id+' input[type=checkbox]').length;
-  var count=cbs.length;
+  var visibleChecked=0,visibleTotal=0,checkedVals=[];
+  document.querySelectorAll('#fdItems-'+id+' .fd-item').forEach(function(lbl){
+    if(lbl.style.display==='none')return;
+    var cb=lbl.querySelector('input');if(!cb)return;
+    visibleTotal++;
+    if(cb.checked){visibleChecked++;checkedVals.push(cb.value);}
+  });
   var badge=document.getElementById('fdBadge-'+id);
   var btn=document.getElementById('fdBtn-'+id);
   var txtEl=document.getElementById('fdBtnTxt-'+id);
   var allCb=document.getElementById('fdAll-'+id);
-  var allSelected=(count===total);
+  var allSelected=(visibleChecked===visibleTotal&&visibleTotal>0);
   if(allCb)allCb.checked=allSelected;
-  if(badge){badge.textContent=count;badge.style.display=(allSelected?'none':'inline')}
+  if(badge){badge.textContent=visibleChecked;badge.style.display=(allSelected?'none':'inline')}
   if(btn){if(!allSelected)btn.classList.add('active');else btn.classList.remove('active')}
   if(txtEl){
     if(allSelected){
       txtEl.textContent=id==='fYear'?'Todos los años':id==='fMonth'?'Todos los meses':'Todas las categorías';
-    } else if(count===0){
+    } else if(visibleChecked===0){
       txtEl.textContent='Ninguno';
-    } else if(count<=2){
-      var vals=[];cbs.forEach(function(cb){vals.push(cb.value)});
-      txtEl.textContent=vals.join(', ');
+    } else if(visibleChecked<=2){
+      txtEl.textContent=checkedVals.join(', ');
     } else {
-      txtEl.textContent=count+' seleccionados';
+      txtEl.textContent=visibleChecked+' seleccionados';
     }
   }
 }
 
 function getMultiVal(id){
-  var vals=[];
-  var allSelected=(document.querySelectorAll('#fdItems-'+id+' input[type=checkbox]').length===
-                   document.querySelectorAll('#fdItems-'+id+' input[type=checkbox]:checked').length);
-  if(allSelected)return []; // empty = no filter = show all
-  document.querySelectorAll('#fdItems-'+id+' input[type=checkbox]:checked').forEach(function(cb){vals.push(cb.value)});
+  var vals=[],visibleTotal=0,visibleChecked=0;
+  document.querySelectorAll('#fdItems-'+id+' .fd-item').forEach(function(lbl){
+    if(lbl.style.display==='none')return;
+    var cb=lbl.querySelector('input');if(!cb)return;
+    visibleTotal++;
+    if(cb.checked){visibleChecked++;vals.push(cb.value);}
+  });
+  if(visibleChecked===visibleTotal&&visibleTotal>0)return []; // all visible selected = no filter
   return vals;
 }
 
@@ -630,23 +639,29 @@ function updateFDAvailability(){
   document.querySelectorAll('#fdItems-fYear .fd-item').forEach(function(lbl){
     var cb=lbl.querySelector('input');if(!cb)return;
     var v=cb.value;var avail=!!availYears[v];
-    lbl.classList.toggle('dimmed',!avail);
+    lbl.style.display=avail?'':'none';
+    if(!avail&&cb.checked){cb.checked=false;}
     var cntEl=lbl.querySelector('.fd-count');if(cntEl)cntEl.textContent=cntYears[v]||0;
   });
+  fdUpdateBadge('fYear');
   // Update month items
   document.querySelectorAll('#fdItems-fMonth .fd-item').forEach(function(lbl){
     var cb=lbl.querySelector('input');if(!cb)return;
     var v=cb.value;var avail=!!availMonths[v];
-    lbl.classList.toggle('dimmed',!avail);
+    lbl.style.display=avail?'':'none';
+    if(!avail&&cb.checked){cb.checked=false;}
     var cntEl=lbl.querySelector('.fd-count');if(cntEl)cntEl.textContent=cntMonths[v]||0;
   });
+  fdUpdateBadge('fMonth');
   // Update category items
   document.querySelectorAll('#fdItems-fCat .fd-item').forEach(function(lbl){
     var cb=lbl.querySelector('input');if(!cb)return;
     var v=cb.value;var avail=!!availCats[v];
-    lbl.classList.toggle('dimmed',!avail);
+    lbl.style.display=avail?'':'none';
+    if(!avail&&cb.checked){cb.checked=false;}
     var cntEl=lbl.querySelector('.fd-count');if(cntEl)cntEl.textContent=cntCats[v]||0;
   });
+  fdUpdateBadge('fCat');
 }
 
 function toggleAll(selId,btn){} // legacy stub
