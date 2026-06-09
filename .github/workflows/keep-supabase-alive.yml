@@ -1,0 +1,44 @@
+name: Keep Supabase Alive
+
+# Latido externo para que el proyecto Supabase (plan free) NO se pause por
+# inactividad. Corre en la nube de GitHub (gratis e ilimitado en repos publicos),
+# asi que funciona aunque el PC de Fernando este apagado.
+#
+# Supabase free pausa tras ~7 dias sin actividad. Pingeamos a diario => 7x de margen.
+#
+# Requiere 2 secrets en el repo (Settings -> Secrets and variables -> Actions):
+#   SUPABASE_URL  ->  https://<project-ref>.supabase.co
+#   SUPABASE_KEY  ->  la anon/publishable key del proyecto (NO la secret key)
+
+on:
+  schedule:
+    - cron: '0 13 * * *'   # 13:00 UTC = 09:00 Chile, todos los dias
+  workflow_dispatch:        # permite correrlo a mano desde la pestana Actions
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_KEY" ]; then
+            echo "Secrets SUPABASE_URL / SUPABASE_KEY aun no configurados. Nada que pingear."
+            echo "Configuralos en Settings -> Secrets and variables -> Actions."
+            exit 0
+          fi
+          echo "Pingeando $SUPABASE_URL ..."
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
+            --retry 3 --retry-delay 10 --max-time 30 \
+            -H "apikey: $SUPABASE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_KEY" \
+            "$SUPABASE_URL/rest/v1/processing_runs?select=id&limit=1")
+          echo "Respuesta HTTP: $code"
+          if [ "$code" -ge 200 ] && [ "$code" -lt 300 ]; then
+            echo "Supabase activo. Keep-alive OK."
+          else
+            echo "Supabase respondio $code (esperaba 2xx). El proyecto puede estar pausado/caido."
+            exit 1
+          fi
