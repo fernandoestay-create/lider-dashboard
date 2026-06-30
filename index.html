@@ -81,11 +81,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .fsearch-wrap input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(230,57,70,.1)}
 .btn-reset{padding:7px 16px;background:var(--gradient);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;align-self:flex-end;transition:transform .15s;white-space:nowrap}
 .btn-reset:hover{transform:scale(1.03)}
-.evo-sel{padding:7px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;background:#f9fafb;min-width:130px;transition:border .2s}
-.evo-sel:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(230,57,70,.1)}
-select#evoProdSel{min-width:280px}
-.evo-search-wrap{position:relative;display:flex;flex-direction:column;gap:2px}
-.evo-search-wrap input{padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;min-width:200px}
 .evo-sort-btn{padding:4px 8px;background:#f0f1f2;border:1px solid var(--border);border-radius:5px;cursor:pointer;font-size:10px;font-weight:600;color:var(--text2);margin-left:4px}
 .evo-sort-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
 
@@ -250,6 +245,11 @@ select#evoProdSel{min-width:280px}
   /* Evolución filtros mobile */
   .evo-filters{flex-direction:column !important;align-items:stretch !important;gap:8px !important}
   .evo-filters>div{width:100%}
+  .evo-filters .fd-wrap{width:100%}
+  .evo-filters .fd-btn{width:100%;justify-content:space-between}
+  .evo-filters .fd-menu{width:100%;min-width:unset}
+  .evo-filters .filter-group{width:100%}
+  .evo-filters .filter-group input{width:100%;min-width:unset !important;font-size:14px !important;padding:10px 12px !important}
   .evo-filters select,.evo-filters input{width:100%;min-width:unset !important;font-size:14px !important;padding:10px 12px !important}
 
   /* Card header sort select */
@@ -438,11 +438,66 @@ select#evoProdSel{min-width:280px}
   <!-- EVOLUCION -->
   <div class="tab-panel" id="panel-evolucion">
     <div class="evo-filters" style="margin-bottom:16px;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;padding:0 4px">
-      <div class="filter-group"><label>Año</label><select id="evoYearSel" class="evo-sel"><option value="">Todos</option></select></div>
-      <div class="filter-group"><label>Mes</label><select id="evoMonthSel" class="evo-sel"><option value="">Todos</option><option value="Enero">Enero</option><option value="Febrero">Febrero</option><option value="Marzo">Marzo</option><option value="Abril">Abril</option><option value="Mayo">Mayo</option><option value="Junio">Junio</option><option value="Julio">Julio</option><option value="Agosto">Agosto</option><option value="Septiembre">Septiembre</option><option value="Octubre">Octubre</option><option value="Noviembre">Noviembre</option><option value="Diciembre">Diciembre</option></select></div>
-      <div class="filter-group"><label>Categoría</label><select id="evoCatSel" class="evo-sel"><option value="">Todas</option></select></div>
+      <!-- Año Evolución -->
+      <div class="fd-wrap" id="fdWrap-evoYear">
+        <span class="fd-label">Año</span>
+        <button class="fd-btn" id="fdBtn-evoYear" onclick="toggleFD('evoYear',event)">
+          <span id="fdBtnTxt-evoYear">Todos los años</span>
+          <span class="fd-badge" id="fdBadge-evoYear" style="display:none"></span>
+          <span class="fd-arrow">▾</span>
+        </button>
+        <div class="fd-menu" id="fdMenu-evoYear">
+          <div class="fd-menu-head">
+            <label class="fd-all-label"><input type="checkbox" id="fdAll-evoYear" checked onchange="fdEvoToggleAll('evoYear',this)"> Seleccionar todos</label>
+          </div>
+          <div class="fd-items" id="fdItems-evoYear"></div>
+        </div>
+      </div>
+      <!-- Mes Evolución -->
+      <div class="fd-wrap" id="fdWrap-evoMonth">
+        <span class="fd-label">Mes</span>
+        <button class="fd-btn" id="fdBtn-evoMonth" onclick="toggleFD('evoMonth',event)">
+          <span id="fdBtnTxt-evoMonth">Todos los meses</span>
+          <span class="fd-badge" id="fdBadge-evoMonth" style="display:none"></span>
+          <span class="fd-arrow">▾</span>
+        </button>
+        <div class="fd-menu" id="fdMenu-evoMonth">
+          <div class="fd-menu-head">
+            <label class="fd-all-label"><input type="checkbox" id="fdAll-evoMonth" checked onchange="fdEvoToggleAll('evoMonth',this)"> Seleccionar todos</label>
+          </div>
+          <div class="fd-items" id="fdItems-evoMonth"></div>
+        </div>
+      </div>
+      <!-- Categoría Evolución -->
+      <div class="fd-wrap" id="fdWrap-evoCat">
+        <span class="fd-label">Categoría</span>
+        <button class="fd-btn" id="fdBtn-evoCat" onclick="toggleFD('evoCat',event)">
+          <span id="fdBtnTxt-evoCat">Todas las categorías</span>
+          <span class="fd-badge" id="fdBadge-evoCat" style="display:none"></span>
+          <span class="fd-arrow">▾</span>
+        </button>
+        <div class="fd-menu" id="fdMenu-evoCat">
+          <div class="fd-menu-head">
+            <label class="fd-all-label"><input type="checkbox" id="fdAll-evoCat" checked onchange="fdEvoToggleAll('evoCat',this)"> Seleccionar todos</label>
+          </div>
+          <div class="fd-items" id="fdItems-evoCat"></div>
+        </div>
+      </div>
+      <!-- Buscar + Producto -->
       <div class="filter-group"><label>Buscar Producto</label><input type="text" id="evoProdSearch" placeholder="Escribe para filtrar..."></div>
-      <div class="filter-group"><label>Producto <button class="evo-sort-btn" id="evoProdSortBtn" onclick="toggleEvoProdSort()">A→Z</button></label><select id="evoProdSel" class="evo-sel"><option value="">Selecciona un producto...</option></select></div>
+      <!-- Producto Evolución -->
+      <div class="fd-wrap" id="fdWrap-evoProd">
+        <span class="fd-label">Producto <button class="evo-sort-btn" id="evoProdSortBtn" onclick="toggleEvoProdSort()">A→Z</button></span>
+        <button class="fd-btn" id="fdBtn-evoProd" onclick="toggleFD('evoProd',event)" style="min-width:220px">
+          <span id="fdBtnTxt-evoProd">Selecciona un producto...</span>
+          <span class="fd-badge" id="fdBadge-evoProd" style="display:none"></span>
+          <span class="fd-arrow">▾</span>
+        </button>
+        <div class="fd-menu" id="fdMenu-evoProd" style="min-width:280px">
+          <div class="fd-items" id="fdItems-evoProd" style="max-height:280px"></div>
+        </div>
+      </div>
+      <button class="btn-reset" onclick="resetEvoFilters()" style="align-self:flex-end">✕ Limpiar</button>
     </div>
     <div style="margin-bottom:20px">
       <div class="card">
@@ -513,6 +568,7 @@ var prodSort='veces_desc',compSort='fecha_desc',dataSort='fecha_desc';
 
 var evoProdSortDir='asc'; // asc = A-Z, desc = Z-A
 var evoProdSearchText='';
+var evoSelProd=''; // producto seleccionado en el dropdown de Evolución
 
 // ===== CUSTOM FILTER DROPDOWNS =====
 var FD_MONTHS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
@@ -670,12 +726,177 @@ function updateFDAvailability(){
 
 function toggleAll(selId,btn){} // legacy stub
 
+// ===== DROPDOWNS CUSTOM DE EVOLUCIÓN =====
+
+// Textos por defecto para cada dropdown de evo
+var EVO_DEFAULT_TXT={evoYear:'Todos los años',evoMonth:'Todos los meses',evoCat:'Todas las categorías'};
+
+// Actualiza badge y texto del botón para dropdowns de evolución
+function fdEvoBadgeUpdate(id){
+  var visibleChecked=0,visibleTotal=0,checkedVals=[];
+  document.querySelectorAll('#fdItems-'+id+' .fd-item').forEach(function(lbl){
+    if(lbl.style.display==='none')return;
+    var cb=lbl.querySelector('input[type=checkbox]');if(!cb)return;
+    visibleTotal++;
+    if(cb.checked){visibleChecked++;checkedVals.push(cb.value);}
+  });
+  var badge=document.getElementById('fdBadge-'+id);
+  var btn=document.getElementById('fdBtn-'+id);
+  var txtEl=document.getElementById('fdBtnTxt-'+id);
+  var allCb=document.getElementById('fdAll-'+id);
+  var allSelected=(visibleChecked===visibleTotal&&visibleTotal>0);
+  if(allCb)allCb.checked=allSelected;
+  if(badge){badge.textContent=visibleChecked;badge.style.display=(allSelected?'none':'inline')}
+  if(btn){if(!allSelected)btn.classList.add('active');else btn.classList.remove('active')}
+  if(txtEl){
+    var defTxt=EVO_DEFAULT_TXT[id]||'Todos';
+    if(allSelected){
+      txtEl.textContent=defTxt;
+    } else if(visibleChecked===0){
+      txtEl.textContent='Ninguno';
+    } else if(visibleChecked<=2){
+      txtEl.textContent=checkedVals.join(', ');
+    } else {
+      txtEl.textContent=visibleChecked+' seleccionados';
+    }
+  }
+}
+
+// Toggle todos en dropdowns de evo (con onchange llama a updateEvoAll)
+function fdEvoToggleAll(id,allCb){
+  document.querySelectorAll('#fdItems-'+id+' .fd-item').forEach(function(lbl){
+    if(lbl.style.display==='none')return;
+    var cb=lbl.querySelector('input[type=checkbox]');if(cb)cb.checked=allCb.checked;
+  });
+  fdEvoBadgeUpdate(id);
+  updateEvoAll();
+}
+
+// Lee valores seleccionados de un dropdown de evo (vacío = todos = sin filtro)
+function getEvoMultiVal(id){
+  var vals=[],visibleTotal=0,visibleChecked=0;
+  document.querySelectorAll('#fdItems-'+id+' .fd-item').forEach(function(lbl){
+    if(lbl.style.display==='none')return;
+    var cb=lbl.querySelector('input[type=checkbox]');if(!cb)return;
+    visibleTotal++;
+    if(cb.checked){visibleChecked++;vals.push(cb.value);}
+  });
+  if(visibleChecked===visibleTotal&&visibleTotal>0)return []; // todos = sin filtro
+  return vals;
+}
+
+// Construye los items de un dropdown de evo (checkboxes)
+function buildEvoFDItems(id,values,counts,catEmoji){
+  var container=document.getElementById('fdItems-'+id);
+  if(!container)return;
+  var html='';
+  values.forEach(function(v){
+    var cnt=(counts&&counts[v]!=null)?counts[v]:null;
+    var emoji=catEmoji?catEmoji(v):'';
+    html+='<label class="fd-item">';
+    html+='<input type="checkbox" value="'+esc(v)+'" checked onchange="fdEvoBadgeUpdate(\''+id+'\');updateEvoAll()"> ';
+    html+=emoji+(emoji?' ':'')+esc(v);
+    if(cnt!=null)html+=' <span class="fd-count">'+cnt+'</span>';
+    html+='</label>';
+  });
+  container.innerHTML=html;
+  fdEvoBadgeUpdate(id);
+}
+
+// Construye el dropdown de productos (selección única, estilo radio)
+function fillEvoProdDropdown(){
+  var eyVals=getEvoMultiVal('evoYear');
+  var emVals=getEvoMultiVal('evoMonth');
+  var ecVals=getEvoMultiVal('evoCat');
+  var prods={};var prodCat={};
+  fItems.forEach(function(i){
+    var n=i.product_name_normalized;if(!n)return;
+    if(ecVals.length&&ecVals.indexOf(i.category)===-1)return;
+    if(eyVals.length&&eyVals.indexOf(String(i.anio))===-1)return;
+    if(emVals.length&&emVals.indexOf(i.mes_nombre)===-1)return;
+    prods[n]=(prods[n]||0)+1;
+    if(!prodCat[n])prodCat[n]=i.category||'Otros';
+  });
+  var searchTxt=evoProdSearchText.toLowerCase();
+  var hasFilter=(eyVals.length||emVals.length||ecVals.length);
+  var minCount=hasFilter?1:2;
+  var sp=Object.keys(prods).filter(function(p){
+    if(prods[p]<minCount)return false;
+    if(searchTxt&&p.toLowerCase().indexOf(searchTxt)===-1)return false;
+    return true;
+  });
+  sp.sort(function(a,b){
+    var al=a.toLowerCase(),bl=b.toLowerCase();
+    if(evoProdSortDir==='asc')return al>bl?1:al<bl?-1:0;
+    return bl>al?1:bl<al?-1:0;
+  });
+  var container=document.getElementById('fdItems-evoProd');
+  var txtEl=document.getElementById('fdBtnTxt-evoProd');
+  var badge=document.getElementById('fdBadge-evoProd');
+  var btn=document.getElementById('fdBtn-evoProd');
+  if(!container)return;
+  var html='';
+  sp.forEach(function(p){
+    var isSel=(evoSelProd===p);
+    var emoji=catOf(prodCat[p]).e||'';
+    html+='<label class="fd-item'+(isSel?' sel':'')+'" style="'+(isSel?'background:#fef2f2;font-weight:600':'')+'"">';
+    html+='<input type="radio" name="evoProdRadio" value="'+esc(p)+'"'+(isSel?' checked':'')+' onchange="selectEvoProd(this.value)"> ';
+    html+=emoji+' '+esc(p)+' <span class="fd-count">'+prods[p]+'x</span>';
+    html+='</label>';
+  });
+  if(!sp.length)html='<div style="padding:10px 8px;font-size:12px;color:var(--text2)">Sin productos para estos filtros</div>';
+  container.innerHTML=html;
+  // Actualiza badge y texto del botón
+  if(evoSelProd&&prods[evoSelProd]){
+    if(txtEl)txtEl.textContent=evoSelProd;
+    if(badge){badge.textContent='1';badge.style.display='inline'}
+    if(btn)btn.classList.add('active');
+  } else {
+    // Si el producto seleccionado ya no está en la lista, deseleccionar
+    if(evoSelProd&&!prods[evoSelProd]){evoSelProd='';}
+    if(txtEl)txtEl.textContent='Selecciona un producto... ('+sp.length+')';
+    if(badge)badge.style.display='none';
+    if(btn)btn.classList.remove('active');
+  }
+}
+
+// Selecciona un producto en el dropdown de evolución
+function selectEvoProd(val){
+  evoSelProd=val;
+  // Cierra el menú
+  var menu=document.getElementById('fdMenu-evoProd');
+  var btn=document.getElementById('fdBtn-evoProd');
+  if(menu)menu.classList.remove('open');
+  if(btn)btn.classList.remove('open');
+  fillEvoProdDropdown();
+  rPriceEvo();
+}
+
+// Actualiza todos los charts de evolución cuando cambia algún filtro
+function updateEvoAll(){
+  fillEvoProdDropdown();
+  updateEvoCharts();
+}
+
+// Reset solo de los filtros de Evolución
+function resetEvoFilters(){
+  ['evoYear','evoMonth','evoCat'].forEach(function(id){
+    document.querySelectorAll('#fdItems-'+id+' input[type=checkbox]').forEach(function(cb){cb.checked=true});
+    var allCb=document.getElementById('fdAll-'+id);if(allCb)allCb.checked=true;
+    fdEvoBadgeUpdate(id);
+  });
+  evoProdSearchText='';
+  var ps=document.getElementById('evoProdSearch');if(ps)ps.value='';
+  evoSelProd='';
+  fillEvoProdDropdown();
+  updateEvoCharts();
+}
+
 function toggleEvoProdSort(){
   evoProdSortDir=evoProdSortDir==='asc'?'desc':'asc';
   var btn=document.getElementById('evoProdSortBtn');
   btn.textContent=evoProdSortDir==='asc'?'A→Z':'Z→A';
-  var catVal=document.getElementById('evoCatSel').value;
-  fillEvoProdSel(catVal);
+  fillEvoProdDropdown();
 }
 
 function fetchAPI(v,p){var u=SB+'/rest/v1/'+v+'?'+(p||'');return fetch(u,{headers:hdr}).then(function(r){return r.json();})}
@@ -738,45 +959,13 @@ function populateFilters(){
   buildFDItems('fYear',yrKeys,null);
   populateFDMonth();
   buildFDItems('fCat',catKeys,null);
-  // Evolution dropdowns (keep as <select>)
-  var eys=document.getElementById('evoYearSel');
-  eys.innerHTML='<option value="">Todos</option>';
-  yrKeys.forEach(function(y){var o=document.createElement('option');o.value=y;o.textContent=y;eys.appendChild(o)});
-  var ecs=document.getElementById('evoCatSel');
-  ecs.innerHTML='<option value="">Todas</option>';
-  catKeys.forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=catOf(c).e+' '+c;ecs.appendChild(o)});
-  fillEvoProdSel('');
+  // Dropdowns custom de Evolución
+  buildEvoFDItems('evoYear',yrKeys,null,null);
+  buildEvoFDItems('evoMonth',FD_MONTHS,null,null);
+  buildEvoFDItems('evoCat',catKeys,null,function(c){return catOf(c).e||''});
+  fillEvoProdDropdown();
 }
 
-function fillEvoProdSel(catFilter){
-  var ey=document.getElementById('evoYearSel').value;
-  var em=document.getElementById('evoMonthSel').value;
-  var prods={};var prodCat={};
-  fItems.forEach(function(i){
-    var n=i.product_name_normalized;if(!n)return;
-    if(catFilter&&i.category!==catFilter)return;
-    if(ey&&String(i.anio)!==ey)return;
-    if(em&&i.mes_nombre!==em)return;
-    prods[n]=(prods[n]||0)+1;
-    if(!prodCat[n])prodCat[n]=i.category||'Otros';
-  });
-  var searchTxt=evoProdSearchText.toLowerCase();
-  var hasFilter=(ey||em||catFilter);
-  var minCount=hasFilter?1:2;
-  var sp=Object.keys(prods).filter(function(p){
-    if(prods[p]<minCount)return false;
-    if(searchTxt&&p.toLowerCase().indexOf(searchTxt)===-1)return false;
-    return true;
-  });
-  sp.sort(function(a,b){
-    var al=a.toLowerCase(),bl=b.toLowerCase();
-    if(evoProdSortDir==='asc')return al>bl?1:al<bl?-1:0;
-    return bl>al?1:bl<al?-1:0;
-  });
-  var es=document.getElementById('evoProdSel');
-  es.innerHTML='<option value="">Selecciona un producto... ('+sp.length+')</option>';
-  sp.forEach(function(p){var o=document.createElement('option');o.value=p;o.textContent=catOf(prodCat[p]).e+' '+p+' ('+prods[p]+'x)';es.appendChild(o)});
-}
 
 function applyFilters(){
   var yrs=getMultiVal('fYear');
@@ -830,13 +1019,16 @@ function resetFilters(){
   });
   document.getElementById('fSearch').value='';
   selProd=null;selComp=null;selComps=[];
-  document.getElementById('evoYearSel').value='';
-  document.getElementById('evoMonthSel').value='';
-  document.getElementById('evoCatSel').value='';
-  document.getElementById('evoProdSearch').value='';
+  // Reset dropdowns custom de Evolución
+  ['evoYear','evoMonth','evoCat'].forEach(function(id){
+    document.querySelectorAll('#fdItems-'+id+' input[type=checkbox]').forEach(function(cb){cb.checked=true});
+    var allCb=document.getElementById('fdAll-'+id);if(allCb)allCb.checked=true;
+    fdEvoBadgeUpdate(id);
+  });
   evoProdSearchText='';
-  document.getElementById('evoProdSel').value='';
-  fillEvoProdSel('');
+  var ps=document.getElementById('evoProdSearch');if(ps)ps.value='';
+  evoSelProd='';
+  fillEvoProdDropdown();
   applyFilters();
 }
 
@@ -846,6 +1038,7 @@ function updateAll(){
   updateProdList();
   updateCompList();
   updateDataTable();
+  fillEvoProdDropdown(); // refresca lista de productos de evo al cambiar filtros globales
   updateEvoCharts();
   if(!selComp&&!selProd)resetDetails();
 }
@@ -1268,18 +1461,18 @@ function updateDataTable(){
 
 // === EVOLUCION ===
 function getEvoFiltered(){
-  var ey=document.getElementById('evoYearSel').value;
-  var em=document.getElementById('evoMonthSel').value;
-  var ec=document.getElementById('evoCatSel').value;
+  var eyVals=getEvoMultiVal('evoYear');
+  var emVals=getEvoMultiVal('evoMonth');
+  var ecVals=getEvoMultiVal('evoCat');
   var items=fItems.filter(function(i){
-    if(ey&&String(i.anio)!==ey)return false;
-    if(em&&i.mes_nombre!==em)return false;
-    if(ec&&i.category!==ec)return false;
+    if(eyVals.length&&eyVals.indexOf(String(i.anio))===-1)return false;
+    if(emVals.length&&emVals.indexOf(i.mes_nombre)===-1)return false;
+    if(ecVals.length&&ecVals.indexOf(i.category)===-1)return false;
     return true;
   });
   var purchases=fPurchases.filter(function(p){
-    if(ey&&String(p.anio)!==ey)return false;
-    if(em&&p.mes_nombre!==em)return false;
+    if(eyVals.length&&eyVals.indexOf(String(p.anio))===-1)return false;
+    if(emVals.length&&emVals.indexOf(p.mes_nombre)===-1)return false;
     return true;
   });
   return{items:items,purchases:purchases};
@@ -1288,18 +1481,18 @@ function updateEvoCharts(){rPriceEvo();rFreqEvo();rTicketEvo();rCatYear()}
 
 function rPriceEvo(){
   dc('pe');
-  var pn=document.getElementById('evoProdSel').value;
+  var pn=evoSelProd;
   if(!pn)return;
-  var ey=document.getElementById('evoYearSel').value;
-  var em=document.getElementById('evoMonthSel').value;
-  var ec=document.getElementById('evoCatSel').value;
-  var hasEvoFilter=(ey||em||ec);
+  var eyVals=getEvoMultiVal('evoYear');
+  var emVals=getEvoMultiVal('evoMonth');
+  var ecVals=getEvoMultiVal('evoCat');
+  var hasEvoFilter=(eyVals.length||emVals.length||ecVals.length);
   // Use fItems as base, apply evo filters strictly
   var items=fItems.filter(function(i){
     if(i.product_name_normalized!==pn||!i.fecha)return false;
-    if(ey&&String(i.anio)!==ey)return false;
-    if(em&&i.mes_nombre!==em)return false;
-    if(ec&&i.category!==ec)return false;
+    if(eyVals.length&&eyVals.indexOf(String(i.anio))===-1)return false;
+    if(emVals.length&&emVals.indexOf(i.mes_nombre)===-1)return false;
+    if(ecVals.length&&ecVals.indexOf(i.category)===-1)return false;
     return true;
   });
   // Only fallback if NO evo filters are active (show all data for product)
@@ -1381,18 +1574,15 @@ document.querySelectorAll('#mainTabs .tab').forEach(function(t){
 // Filter events (checkboxes trigger applyFilters via onchange in buildFDItems)
 var sTO;
 document.getElementById('fSearch').addEventListener('input',function(){clearTimeout(sTO);sTO=setTimeout(function(){selComps=[];applyFilters()},300)});
-document.getElementById('evoProdSel').addEventListener('change',rPriceEvo);
-document.getElementById('evoCatSel').addEventListener('change',function(){fillEvoProdSel(this.value);updateEvoCharts()});
-document.getElementById('evoYearSel').addEventListener('change',function(){var catVal=document.getElementById('evoCatSel').value;fillEvoProdSel(catVal);updateEvoCharts()});
-document.getElementById('evoMonthSel').addEventListener('change',function(){var catVal=document.getElementById('evoCatSel').value;fillEvoProdSel(catVal);updateEvoCharts()});
+// Listeners de Evolución — los dropdowns de año/mes/cat usan onchange inline (fdEvoToggleAll / fdEvoBadgeUpdate+updateEvoAll)
+// Solo queda el listener del buscador de productos
 var evoSearchTO;
 document.getElementById('evoProdSearch').addEventListener('input',function(){
   var self=this;
   clearTimeout(evoSearchTO);
   evoSearchTO=setTimeout(function(){
     evoProdSearchText=self.value;
-    var catVal=document.getElementById('evoCatSel').value;
-    fillEvoProdSel(catVal);
+    fillEvoProdDropdown();
   },250);
 });
 document.getElementById('dataSortSel').addEventListener('change',function(){dataSortKey=this.value;dataPage=0;updateDataTable()});
