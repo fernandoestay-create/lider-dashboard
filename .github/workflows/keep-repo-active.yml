@@ -1,0 +1,30 @@
+name: Keep Repo Active
+
+# Hace un commit mensual para que GitHub no deshabilite los workflows
+# programados por inactividad (limite: 60 dias sin commits).
+# Sin este workflow, "Keep Supabase Alive" se desactivaria a los 60 dias
+# y Supabase se pausaria 7 dias despues.
+
+on:
+  schedule:
+    - cron: '0 12 1 * *'   # dia 1 de cada mes, 12:00 UTC = 08:00 Chile
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Actualizar timestamp keepalive
+        run: |
+          echo "Last keepalive: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" > .keepalive
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .keepalive
+          git commit -m "chore: keepalive mensual $(date -u '+%Y-%m')"
+          git push
